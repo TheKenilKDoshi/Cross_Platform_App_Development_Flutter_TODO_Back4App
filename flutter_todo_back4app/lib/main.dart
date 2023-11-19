@@ -1,5 +1,5 @@
 // main.dart
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
@@ -184,6 +184,7 @@ class _TodoListState extends State<TodoList> {
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: titleController,
@@ -241,6 +242,7 @@ class _TodoListState extends State<TodoList> {
         ),
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
               controller: titleController,
@@ -318,11 +320,44 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
+  Future<void> _showTaskDetailsDialog(ParseObject task) async {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Task Details',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Title: ' + task.get('title'),
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              'Description: ' + task.get('description'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+            },
+            child: Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TODO List'),
+        title: Text('Task List'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -336,7 +371,6 @@ class _TodoListState extends State<TodoList> {
             },
           ),
         ],
-        // backgroundColor: Colors.blue, // Customize the background color
         elevation: 16.0, // Add elevation for a shadow effect
       ),
       body: ListView.builder(
@@ -348,24 +382,14 @@ class _TodoListState extends State<TodoList> {
             elevation: 4.0,
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: ListTile(
-              /*leading: IconButton(
-                icon: isCompleted
-                    ? Icon(Icons.check_circle, color: Colors.green)
-                    // : Icon(Icons.check_circle_outline),
-                    : Icon(Icons.error),
-                onPressed: () {
-                  _toggleTaskCompletion(task, !isCompleted);
-                },
-              ),*/
-
+              onTap: () {
+                _showTaskDetailsDialog(task);
+              },
               leading: CircleAvatar(
-                child: Icon(
-                    isCompleted ? Icons.check : Icons.error),
-                backgroundColor:
-                isCompleted ? Colors.green : Colors.blueGrey,
+                child: Icon(isCompleted ? Icons.check : Icons.error),
+                backgroundColor: isCompleted ? Colors.green : Colors.blueGrey,
                 foregroundColor: Colors.white,
               ),
-
               title: Text(
                 task.get('title'),
                 style: TextStyle(
