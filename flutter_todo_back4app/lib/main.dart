@@ -7,9 +7,9 @@ import 'package:parse_server_sdk/parse_server_sdk.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Parse().initialize(
-    '5a9SVslgfUe2Act1BRo9UBUlGEbDAGDgwW3qCCMd',
+    'Co1KGyjPAB8gqwlw5mgxSo41xER9hSp1XAbLXodr',
     'https://parseapi.back4app.com',
-    clientKey: 'xTVJSvBagsmzFVsA3BRVn3XJBTTod1wj6fjdCsxL',
+    clientKey: 'Jnir1HVMYvvseAPDHGspesRrlrDKuOCcD7BErriP',
     autoSendSessionId: true,
     debug: true,
   );
